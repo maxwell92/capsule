@@ -1,1 +1,4 @@
-# capsule
+capsule
+============
+
+Homemade golang container playground.
