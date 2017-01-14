@@ -16,11 +16,14 @@ func Create() error {
 	pAttr := &os.ProcAttr{
 		Sys: spAttr,
 	}
-	np, err := os.StartProcess("new process", nil, os.ProcAttr)
+
+	// it's says no such file or directory
+	np, err := os.StartProcess("new process", nil, pAttr)
 	if err != nil {
 		logrus.Println(err)
 		return err
 	}
+
 	fmt.Printf("New Process Pid: %d\n", np.Pid)
 	fmt.Printf("Pid: %d\n", os.Getpid())
 	return nil
