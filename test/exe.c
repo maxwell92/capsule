@@ -8,7 +8,7 @@ int main() {
     char buf[MAXBUFSIZE];
     int count;
 
-    cout = readlink("/proc/self/exe", buf, MAXBUFSIZE);
+    count = readlink("/proc/self/exe", buf, MAXBUFSIZE);
     if( count < 0 || count >= MAXBUFSIZE) {
         printf("Failed\n"); 
         return (EXIT_FAILURE);
