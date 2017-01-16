@@ -14,7 +14,7 @@ func main() {
 	case "child":
 		child()
 	default:
-		panic("wat should I do")
+		panic("what should I do")
 	}
 }
 
@@ -36,7 +36,7 @@ func parent() {
 	fmt.Printf("%s\n", os.Hostname())
 
 	if err := cmd.Run(); err != nil {
-		fmt.Println("ERROR", err)
+		fmt.Printf("ERROR", err)
 		os.Exit(1)
 	}
 }
@@ -54,10 +54,10 @@ func child() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Println("%d\n", os.Getpid())
+	fmt.Printf("%d\n", os.Getpid())
 
 	if err := cmd.Run(); err != nil {
-		fmt.Println("ERROR", err)
+		fmt.Printf("ERROR", err)
 		os.Exit(1)
 	}
 }
