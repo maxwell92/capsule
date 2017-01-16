@@ -34,7 +34,8 @@ func parent() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Printf("%d\n", os.Getpid())
+	fmt.Println("%d\n", os.Getpid())
+	fmt.Printf("%s\n", os.Hostname())
 
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("ERROR", err)
