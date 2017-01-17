@@ -49,6 +49,7 @@ func parent() {
 }
 
 func child() {
+	/*
 	err := syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, "")
 	if err != nil {
 		fmt.Printf("Mount rootfs\n")
@@ -72,6 +73,7 @@ func child() {
 		fmt.Printf("Chdir rootfs\n")
 		panic(err)
 	}
+	*/
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
