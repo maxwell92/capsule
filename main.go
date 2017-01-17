@@ -34,8 +34,13 @@ func parent() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Println("%d\n", os.Getpid())
-	fmt.Printf("%s\n", os.Hostname())
+	fmt.Printf("pid: %d\n", os.Getpid())
+	hostName, err := os.Hostname()
+	if err != nil {
+		fmt.Printf("ERROR", err)
+		os.Exit(1)
+	}
+	fmt.Printf("hostname: %s\n", hostName)
 
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("ERROR", err)
@@ -44,19 +49,26 @@ func parent() {
 }
 
 func child() {
-	/*
-		must(syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, ""))
-		must(os.MkdirAll("rootfs/oldrootfs", 0700))
-		must(syscall.PivotRoot("rootfs", "rootfs/oldrootfs"))
-		must(os.Chdir("/"))
-	*/
+	must(syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, ""))
+	must(os.MkdirAll("rootfs/oldrootfs", 0700))
+	must(syscall.PivotRoot("rootfs", "rootfs/oldrootfs"))
+	must(os.Chdir("/"))
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Printf("%d\n", os.Getpid())
+	fmt.Printf("pid: %d\n", os.Getpid())
+
+	syscall.Sethostname([]byte("NewNamespace"))
+
+	hostName, err := os.Hostname()
+	if err != nil {
+		fmt.Printf("ERROR", err)
+		os.Exit(1)
+	}
+	fmt.Printf("hostname: %s\n", hostName)
 
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("ERROR", err)
