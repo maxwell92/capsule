@@ -49,10 +49,29 @@ func parent() {
 }
 
 func child() {
-	must(syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, ""))
-	must(os.MkdirAll("rootfs/oldrootfs", 0700))
-	must(syscall.PivotRoot("rootfs", "rootfs/oldrootfs"))
-	must(os.Chdir("/"))
+	err := syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, "")
+	if err != nil {
+		fmt.Printf("Mount rootfs\n")
+		panic(err)
+	}
+
+	err = os.MkdirAll("rootfs/oldrootfs", 0700)
+	if err != nil {
+		fmt.Printf("MkdirAll rootfs\n")
+		panic(err)
+	}
+
+	err = syscall.PivotRoot("rootfs", "rootfs/oldrootfs")
+	if err != nil {
+		fmt.Printf("PivotRoot rootfs\n")
+		panic(err)
+	}
+
+	err = os.Chdir("/")
+	if err != nil {
+		fmt.Printf("Chdir rootfs\n")
+		panic(err)
+	}
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
