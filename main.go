@@ -19,16 +19,11 @@ func main() {
 }
 
 func parent() {
-	cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
-	/*
+	//cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
+	cmd := exec.Command("chroot", "rootfs/")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+		Cloneflags: syscall.CLONE_NEWNS | syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNET,
 	}
-	*/
-
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-	Cloneflags: syscall.CLONE_NEWNS | syscall.CLONE_NEWUTS | syscall.CLONE_NEWIPC | syscall.CLONE_NEWUSER | syscall.CLONE_NEWPID | syscall.CLONE_NEWNET,
-}
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -37,13 +32,13 @@ func parent() {
 	fmt.Printf("pid: %d\n", os.Getpid())
 	hostName, err := os.Hostname()
 	if err != nil {
-		fmt.Printf("ERROR", err)
+		fmt.Printf("ERROR: %s\n", err)
 		os.Exit(1)
 	}
 	fmt.Printf("hostname: %s\n", hostName)
 
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("ERROR", err)
+		fmt.Printf("ERROR: %s\n", err)
 		os.Exit(1)
 	}
 }
@@ -86,13 +81,13 @@ func child() {
 
 	hostName, err := os.Hostname()
 	if err != nil {
-		fmt.Printf("ERROR", err)
+		fmt.Printf("ERROR: %s", err)
 		os.Exit(1)
 	}
 	fmt.Printf("hostname: %s\n", hostName)
 
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("ERROR", err)
+		fmt.Printf("ERROR: %s", err)
 		os.Exit(1)
 	}
 }
